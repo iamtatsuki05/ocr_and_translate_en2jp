@@ -18,3 +18,8 @@ RUN pip install poetry && \
   poetry config virtualenvs.create false
 COPY poetry.lock pyproject.toml ./
 RUN poetry install
+
+# install ocr tools
+RUN apt-get update && apt-get install -y \
+  tesseract-ocr tesseract-ocr-jpn \
+  poppler-utils
