@@ -12,12 +12,19 @@ def df_generator(
     seed=None,
     is_return_csv=True,
     is_return_excel=False,
+    is_clean=True,
 ):
     ocr_result = ocr_image(file_path, is_return_list=True)
     ocr_result = list(set(ocr_result))
     df = pd.DataFrame(ocr_result, columns=["word"])
+    if is_clean:
+        df = df[df["word"].str.contains("[a-zA-Z]", na=False)].reset_index(drop=True)
     df["word_pos"] = df["word"].apply(generate_jp_word_type)
+    if is_clean:
+        df = df[df["word_pos"].notnull()].reset_index(drop=True)
     df["word_JP"] = df["word"].apply(translate_word)
+    if is_clean:
+        df = df[df["word_JP"].notnull()].reset_index(drop=True)
 
     if max_words is None:
         max_words = len(df)
