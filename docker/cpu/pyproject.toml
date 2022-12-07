@@ -17,6 +17,7 @@ jupyterlab-tabnine = "^0.0.24"
 scikit-learn = "^1.1.1"
 pytesseract = "^0.3.10"
 pdf2image = "^1.16.0"
+nltk = "^3.7"
 
 
 [tool.poetry.dev-dependencies]
