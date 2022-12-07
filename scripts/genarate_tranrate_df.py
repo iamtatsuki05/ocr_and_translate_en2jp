@@ -5,10 +5,13 @@ from ocr_and_translate_en2jp.translate import generate_jp_word_type, translate_w
 
 def df_generator(
     file_path,
-    output_path="./output.csv",
+    output_dir="./",
+    output_name="output",
     max_words=None,
     is_return_shuffle=False,
     seed=None,
+    is_return_csv=True,
+    is_return_excel=False,
 ):
     ocr_result = ocr_image(file_path, is_return_list=True)
     ocr_result = list(set(ocr_result))
@@ -22,7 +25,12 @@ def df_generator(
         df = df.sample(n=max_words, random_state=seed, ignore_index=True)
     else:
         df = df.head(max_words)
-    df.to_csv(output_path, index=False)
+    if is_return_csv:
+        output_path = f"{output_dir}/{output_name}.csv"
+        df.to_csv(output_path, index=False)
+    if is_return_excel:
+        output_path = f"{output_dir}/{output_name}.xlsx"
+        df.to_excel(output_path, index=False)
 
 
 def main():
