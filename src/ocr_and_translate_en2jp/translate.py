@@ -89,7 +89,7 @@ def search_weblio(word):
     soup = BeautifulSoup(response.text, 'html.parser')
     return soup
 
-def parse_item(word):
+def translate_en2jp(word):
     en_pos = nltk.pos_tag(list(word))[0][-1]
     jp_pos = conver_type_en2jp(en_pos)
     soup = search_weblio(word)
