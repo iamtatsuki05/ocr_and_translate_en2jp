@@ -84,15 +84,18 @@ def conver_type_en2jp(pos):
         jp_pos = None
     return jp_pos
 
-def search_weblio(word):
+def generate_jp_word_type(word):
+    en_pos = nltk.pos_tag(list(word))[0][-1]
+    return conver_type_en2jp(en_pos)
+
+def translate_word(word):
     response = requests.get(url+word)
     soup = BeautifulSoup(response.text, 'html.parser')
-    return soup
+    return soup.find(class_='content-explanation ej').get_text().strip()
 
 def translate_en2jp(word):
-    en_pos = nltk.pos_tag(list(word))[0][-1]
-    jp_pos = conver_type_en2jp(en_pos)
-    soup = search_weblio(word)
-    japanese_word = soup.find(class_='content-explanation ej').get_text().strip()
+    jp_pos = generate_jp_word_type(word)
+    japanese_word = translate_word(word)
     properties = {'word': word, 'japanese_word': japanese_word, 'word_type': jp_pos}
     return properties
+
