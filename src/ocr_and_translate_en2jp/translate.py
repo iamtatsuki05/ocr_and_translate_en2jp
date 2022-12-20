@@ -9,9 +9,10 @@ def generate_jp_word_type(word):
     soup = BeautifulSoup(response.text, "html.parser")
     try:
         result = soup.find(class_="KnenjSub").get_text().strip().split(" ")
+        result = result[0]
     except AttributeError:
         result = None
-    return result[0]
+    return result
 
 
 def translate_word(word):
