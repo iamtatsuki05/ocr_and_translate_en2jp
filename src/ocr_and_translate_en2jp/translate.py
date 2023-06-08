@@ -1,32 +1,34 @@
 import requests
 from bs4 import BeautifulSoup
+from typing import Optional
 
-url = "https://ejje.weblio.jp/content/"
+BASE_URL = "https://ejje.weblio.jp/content/"
 
 
-def generate_jp_word_type(word):
-    response = requests.get(url + word)
-    soup = BeautifulSoup(response.text, "html.parser")
+def generate_soup_from_url(word: str) -> BeautifulSoup:
+    response = requests.get(BASE_URL + word)
+    return BeautifulSoup(response.text, "html.parser")
+
+
+def get_text_from_class(soup: BeautifulSoup, class_name: str) -> Optional[str]:
     try:
-        result = soup.find(class_="KnenjSub").get_text().strip().split(" ")
-        result = result[0]
+        return soup.find(class_=class_name).get_text().strip()
     except AttributeError:
-        result = None
-    return result
+        return None
 
 
-def translate_word(word):
-    response = requests.get(url + word)
-    soup = BeautifulSoup(response.text, "html.parser")
-    try:
-        result = soup.find(class_="content-explanation ej").get_text().strip()
-    except AttributeError:
-        result = None
-    return result
+def get_word_type_japanese(word: str) -> Optional[str]:
+    soup = generate_soup_from_url(word)
+    text = get_text_from_class(soup, "KnenjSub")
+    return text.split(" ")[0] if text else None
 
 
-def translate_en2jp(word):
-    jp_pos = generate_jp_word_type(word)
-    japanese_word = translate_word(word)
-    properties = {"word": word, "japanese_word": japanese_word, "word_type": jp_pos}
-    return properties
+def get_translation(word: str) -> Optional[str]:
+    soup = generate_soup_from_url(word)
+    return get_text_from_class(soup, "content-explanation ej")
+
+
+def translate_english_to_japanese(word: str) -> dict[str, Optional[str]]:
+    japanese_word_type = get_word_type_japanese(word)
+    japanese_translation = get_translation(word)
+    return {"word": word, "japanese_word": japanese_translation, "word_type": japanese_word_type}
