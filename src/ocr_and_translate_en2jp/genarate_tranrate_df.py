@@ -5,12 +5,10 @@ import pandas as pd
 from tqdm.auto import tqdm
 
 from ocr_and_translate_en2jp.ocr import ocr_image
-from ocr_and_translate_en2jp.translate import (
-    get_word_type_japanese,
-    get_translation,
-)
+from ocr_and_translate_en2jp.translate import get_translation, get_word_type_japanese
 
 tqdm.pandas()
+
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df['word'].str.contains('[a-zA-Z]', na=False)].reset_index(drop=True)
