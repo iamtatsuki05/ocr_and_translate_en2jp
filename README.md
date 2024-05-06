@@ -1,4 +1,6 @@
 # ocr and translate en2jp
+![app_sample](https://github.com/iamtatsuki05/ocr_and_translate_en2jp/blob/main/images/app_sample.png)
+
 ## How to start app
 ### docker configuration
 1. `docker-compose up -d --build`
