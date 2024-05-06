@@ -2,16 +2,21 @@ from pathlib import Path
 from typing import Optional, Union
 
 import pandas as pd
+from tqdm.auto import tqdm
 
 from ocr_and_translate_en2jp.ocr import ocr_image
-from ocr_and_translate_en2jp.translate import generate_jp_word_type, translate_word
+from ocr_and_translate_en2jp.translate import (
+    get_word_type_japanese,
+    get_translation,
+)
 
+tqdm.pandas()
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df['word'].str.contains('[a-zA-Z]', na=False)].reset_index(drop=True)
-    df['word_pos'] = df['word'].apply(generate_jp_word_type)
+    df['word_pos'] = df['word'].progress_apply(get_word_type_japanese)
     df = df[df['word_pos'].notnull()].reset_index(drop=True)
-    df['word_JP'] = df['word'].apply(translate_word)
+    df['word_JP'] = df['word'].progress_apply(get_translation)
     return df[df['word_JP'].notnull()].reset_index(drop=True)
 
 
@@ -45,6 +50,8 @@ def df_generator(
         df = clean_data(df)
 
     max_words = max_words or len(df)
+    if max_words > len(df):
+        max_words = len(df)
     df = (
         df.sample(n=max_words, random_state=seed, ignore_index=True)
         if do_shuffle_output
