@@ -1,5 +1,7 @@
-# ocr and translate en2jp
+# Ocr And Translate En2jp
 ![app_sample](https://github.com/iamtatsuki05/ocr_and_translate_en2jp/blob/main/images/app_sample.png)
+
+## [HF APP](https://huggingface.co/spaces/iamtatsuki05/ocr_and_translate_en2jp)
 
 ## How to start app
 ### docker configuration
