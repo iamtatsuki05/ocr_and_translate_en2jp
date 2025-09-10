@@ -1,0 +1,40 @@
+# name: HF → GitHub cron sync
+
+# # 参考: https://huggingface.co/datasets/John6666/forum1/blob/main/sync_hf_github.md
+# # Option 2: 定期同期（Webhooksが使えない場合のフォールバック）
+
+# on:
+#   schedule:
+#     - cron: '*/30 * * * *' # 30分毎にチェック（必要に応じて調整）
+#   workflow_dispatch:
+
+# env:
+#   HF_REPO: your-user-or-org/your-hf-repo
+#   REF: main
+
+# jobs:
+#   sync_main_ff:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Install git-lfs
+#         run: git lfs install
+
+#       - name: Checkout GitHub repo
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+
+#       - name: Add HF remote and fast-forward main
+#         run: |
+#           set -euo pipefail
+#           HF_REPO="${{ env.HF_REPO }}"
+#           if [ -n "${{ secrets.HF_TOKEN }}" ]; then
+#             git remote add hf "https://__token__:${{ secrets.HF_TOKEN }}@huggingface.co/${HF_REPO}"
+#           else
+#             git remote add hf "https://huggingface.co/${HF_REPO}"
+#           fi
+#           git fetch hf --tags
+#           git checkout -B "${{ env.REF }}" "origin/${{ env.REF }}" || git checkout -B "${{ env.REF }}"
+#           git merge --ff-only "hf/${{ env.REF }}" || { echo "Non-ff merge. Skip."; exit 0; }
+#           git push origin "${{ env.REF }}" --tags
+
