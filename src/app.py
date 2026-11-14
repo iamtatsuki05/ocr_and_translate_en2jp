@@ -7,6 +7,9 @@ import streamlit as st
 
 from ocr_and_translate_en2jp.genarate_tranrate_df import df_generator
 
+HEADER_IMAGE = Path(__file__).resolve().parent.parent / 'images' / 'header.png'
+
+st.image(str(HEADER_IMAGE), use_column_width=True)
 st.title('OCR and Translation App')
 
 uploaded_file = st.file_uploader('Choose a file')

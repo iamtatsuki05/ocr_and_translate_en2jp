@@ -1,3 +1,5 @@
+![OCR and Translate EN→JP](images/header.png)
+
 # Ocr And Translate En2jp
 ![app_sample](https://github.com/iamtatsuki05/ocr_and_translate_en2jp/blob/main/images/app_sample.png)
 
